@@ -13,7 +13,10 @@ input3  = as.numeric(args[3])
 input4 = as.numeric(args[4])
 output1  = args[5]
 
-peaks <- get(load(input1))
+DMRInfo <-  read.table(input1)
+peaks <- GRanges(seqnames = DMRInfo[, 1],
+                    ranges = IRanges
+                    (start = DMRInfo[, 2], end = DMRInfo[, 3]))
 
 annoData <- toGRanges(EnsDb.Hsapiens.v75)
 seqlevelsStyle(peaks) <- seqlevelsStyle(annoData)

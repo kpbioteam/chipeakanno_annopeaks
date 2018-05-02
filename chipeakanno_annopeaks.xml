@@ -9,7 +9,7 @@
         Rscript  ${__tool_directory__}/chipeakanno_annopeaks.R "$input1" "$input2" "$input3" "$input4" "$output1"
     ]]></command>
     <inputs>
-        <param type="data" name="input1" format="rdata" />
+        <param type="data" name="input1" format="bed"/>
         <param name="input2" type="select" label="bindingType" help="Specifying the criteria to associate peaks with annotation e.g. startSite start position of the feature strand">
                         <option value="startSite">startSite</option>
                         <option value="endSite">endSite</option>
@@ -24,7 +24,7 @@
     </outputs>
     <tests>
         <test>
-            <param name="input1" value="peaks.rdata"/>
+            <param name="input1" value="dmr.bed"/>
             <param name="input2" value="startSite"/>
             <param name="input3" value="-5000"/>
             <param name="input4" value="5000"/>
