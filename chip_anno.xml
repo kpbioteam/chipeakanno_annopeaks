@@ -1,0 +1,58 @@
+<tool id="chip_anno" name="chip_anno" version="0.1.0">
+    <description>annotate peaks by annoGR object in the given range</description>
+    <requirements>
+        <requirement type="package" version="3.12.0">bioconductor-chippeakanno</requirement>
+        <requirement type="package" version="2.99.0">bioconductor-ensdb.hsapiens.v75</requirement>
+        <requirement type="package" version="1.38.3">bioconductor-rtracklayer</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript  ${__tool_directory__}/chipeakanno_annopeaks.R "$input1" "$input2" "$input3" "$input4" "$output1"
+    ]]></command>
+    <inputs>
+        <param type="data" name="input1" format="rdata" />
+        <param name="input2" type="select" label="bindingType" help="Specifying the criteria to associate peaks with annotation e.g. startSite start position of the feature strand">
+                        <option value="startSite">startSite</option>
+                        <option value="endSite">endSite</option>
+                        <option value="fullRange">fullRange</option>
+                        <option value="nearestBiDirectionalPromoters">nearestBiDirectionalPromoters</option>
+                    </param>
+          <param name="input3" type="text" value="-5000" label="bindingRegionStart" help="e.g. to obtain peaks within 5kb upstream and up to 3kb downstream of TSS within the gene body, set bindingType = startSite and bindingRegion = c(-5000, 3000)"/>
+            <param name="input4" type="text" value="3000" label="bindingRegionEnd" help="e.g. to obtain peaks with nearest bi-directional promoters within 5kb upstream and 3kb downstream of TSS, set bindingType = nearestBiDirectionalPromoters and bindingRegion = c(-5000, 3000)"/>
+    </inputs>
+    <outputs>
+        <data name="output1" format="txt" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input1" value="peaks.rdata"/>
+            <param name="input2" value="startSite"/>
+            <param name="input3" value="-5000"/>
+            <param name="input4" value="5000"/>
+            <output name="output1" file="annoTab.txt"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+This tool annotate peaks from GRSet class.
+bindingType
+Specifying the criteria to associate peaks with annotation. Here is how to use it together with the parameter bindingRegion
+To obtain peaks within 5kb upstream and up to 3kb downstream of TSS within the gene body, set bindingType = "startSite" and bindingRegion = c(-5000, 3000)
+To obtain peaks up to 5kb upstream within the gene body and 3kb downstream of gene/Exon End, set bindingType = "endSite" and bindingRegion = c(-5000, 3000)
+To obtain peaks from 5kb upstream to 3kb downstream of genes/Exons , set bindingType = "fullRange" and bindingRegion = c(-5000, 3000)
+To obtain peaks with nearest bi-directional promoters within 5kb upstream and 3kb downstream of TSS, set bindingType = "nearestBiDirectionalPromoters" and bindingRegion = c(-5000, 3000)
+startSite
+start position of the feature (strand is considered)
+endSite
+end position of the feature (strand is considered)
+fullRange
+whole range of the feature
+nearestBiDirectionalPromoters
+nearest promoters from both direction of the peaks (strand is considered). It will report bidirectional promoters if there are promoters in both directions in the given region (defined by bindingRegion). Otherwise, it will report the closest promoter in one direction.
+bindingRegion
+Annotation range used together with bindingType, which is a vector with two integer values, default to c (-5000, 5000). The first one must be no bigger than 0. And the sec ond one must be no less than 1. For details, see bindingType.
+ignore.peak.strand
+ignore the peaks strand or not.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.18129/B9.bioc.ChIPpeakAnno</citation>
+    </citations>
+</tool>
