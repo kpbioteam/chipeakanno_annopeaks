@@ -1,3 +1,8 @@
+source("https://bioconductor.org/biocLite.R")
+biocLite("ChIPpeakAnno")
+ 
+biocLite("rtracklayer")
+
 require("ChIPpeakAnno", quietly = TRUE)
 require("EnsDb.Hsapiens.v75", quietly = TRUE)
 require("rtracklayer", quietly = TRUE)
