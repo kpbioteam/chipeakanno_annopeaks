@@ -28,4 +28,4 @@ seqlevelsStyle(peaks) <- seqlevelsStyle(annoData)
 
  anno <- annoPeaks(peaks, annoData=annoData, bindingType =c(input2), bindingRegion=c(input3, input4))
  
- write.table(anno, file= output1, quote = FALSE, row.names = FALSE, sep = "/t")
+ write.table(anno, file= output1, quote = FALSE, row.names = FALSE, sep = "\t")
