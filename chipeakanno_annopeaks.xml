@@ -32,7 +32,7 @@
         </test>
     </tests>
     <help><![CDATA[
-This tool annotate peaks from GRSet class.
+This tool annotate peaks from bed file.
 bindingType
 Specifying the criteria to associate peaks with annotation. Here is how to use it together with the parameter bindingRegion
 To obtain peaks within 5kb upstream and up to 3kb downstream of TSS within the gene body, set bindingType = "startSite" and bindingRegion = c(-5000, 3000)
