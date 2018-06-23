@@ -1,8 +1,3 @@
-source("https://bioconductor.org/biocLite.R")
-biocLite("ChIPpeakAnno")
- 
-biocLite("rtracklayer")
-
 require("ChIPpeakAnno", quietly = TRUE)
 require("EnsDb.Hsapiens.v75", quietly = TRUE)
 require("rtracklayer", quietly = TRUE)
@@ -16,12 +11,13 @@ input1 = args[1]
 input2 = args[2]
 input3  = as.numeric(args[3])
 input4 = as.numeric(args[4])
-output1  = args[5]
+input5 = as.numeric(args[5])
+output1  = args[6]
 
 DMRInfo <-  read.table(input1)
 peaks <- GRanges(seqnames = DMRInfo[, 1],
                     ranges = IRanges
-                    (start = DMRInfo[, 2], end = DMRInfo[, 3]))
+                    (start = DMRInfo[, 2], end = DMRInfo[, 3]),score=DMRInfo[, input5])
 
 annoData <- toGRanges(EnsDb.Hsapiens.v75)
 seqlevelsStyle(peaks) <- seqlevelsStyle(annoData)
