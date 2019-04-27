@@ -6,31 +6,58 @@
         <requirement type="package" version="1.42.1-1">bioconductor-rtracklayer</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        Rscript  ${__tool_directory__}/chipeakanno_annopeaks.R "$input1" "$input2" "$input3" "$input4" "$input5" "$output1"
+        Rscript '$chipeakanno_annopeaks_script'
     ]]></command>
+    <configfiles>
+        <configfile name="chipeakanno_annopeaks_script"><![CDATA[
+require("ChIPpeakAnno", quietly = TRUE)
+require("EnsDb.Hsapiens.v75", quietly = TRUE)
+require("rtracklayer", quietly = TRUE)
+
+options(warn = -1)
+
+data <-  read.table('$dmp')
+
+peaks <- GRanges(seqnames = data[, 1],
+                 ranges = IRanges
+                 (start = data[, 2], end = data[, 3]),score=data[, as.numeric('$score')])
+
+db <- toGRanges(EnsDb.Hsapiens.v75)
+seqlevelsStyle(peaks) <- seqlevelsStyle(db)
+
+start <- as.numeric('$start')
+end <- as.numeric('$end')
+
+anno <- annoPeaks(peaks, annoData=db, bindingType =c('$type'), bindingRegion=c(start, end))
+
+write.table(anno, file= '$tab', quote = FALSE, row.names = FALSE, sep = "\t")
+]]>
+        </configfile>
+    </configfiles> 
     <inputs>
-        <param type="data" name="input1" format="bedgraph" label="Differentially Methylated Data"/>
-        <param name="input2" type="select" label="bindingType" help="Specifying the criteria to associate peaks with annotation e.g. startSite start position of the feature strand">
+        <param type="data" name="dmp" format="interval" label="Differentially Methylated Data"/>
+        <param name="type" type="select" label="bindingType" help="Specifying the criteria to associate peaks with annotation e.g. startSite start position of the feature strand">
                         <option value="startSite">startSite</option>
                         <option value="endSite">endSite</option>
                         <option value="fullRange">fullRange</option>
                         <option value="nearestBiDirectionalPromoters">nearestBiDirectionalPromoters</option>
                     </param>
-          <param name="input3" type="text" value="-5000" label="bindingRegionStart" help="e.g. to obtain peaks within 5kb upstream and up to 3kb downstream of TSS within the gene body, set bindingType = startSite and bindingRegion = c(-5000, 3000)"/>
-            <param name="input4" type="text" value="3000" label="bindingRegionEnd" help="e.g. to obtain peaks with nearest bi-directional promoters within 5kb upstream and 3kb downstream of TSS, set bindingType = nearestBiDirectionalPromoters and bindingRegion = c(-5000, 3000)"/>
+          <param name="start" type="text" value="-5000" label="bindingRegionStart" help="e.g. to obtain peaks within 5kb upstream and up to 3kb downstream of TSS within the gene body, set bindingType = startSite and bindingRegion = c(-5000, 3000)"/>
+            <param name="end" type="text" value="3000" label="bindingRegionEnd" help="e.g. to obtain peaks with nearest bi-directional promoters within 5kb upstream and 3kb downstream of TSS, set bindingType = nearestBiDirectionalPromoters and bindingRegion = c(-5000, 3000)"/>
 
-<param name="input5" type="text" value="1" label="Additional Column of Score" help="Position of Additional Column of the Score" />
+<param name="score" type="text" value="5" label="Additional Column of Score" help="Position of Additional Column of the Score" />
     </inputs>
     <outputs>
-        <data name="output1" format="txt" label="Table of Annotated Peaks"/>
+        <data name="tab" format="tabular" label="Table of Annotated Peaks"/>
     </outputs>
     <tests>
         <test>
-            <param name="input1" value="dmr.bedgraph"/>
-            <param name="input2" value="startSite"/>
-            <param name="input3" value="-5000"/>
-            <param name="input4" value="5000"/>
-            <output name="output1" file="annoTab.txt"/>
+            <param name="dmp" value="Differentially_Methylated_Regions.interval"/>
+            <param name="type" value="startSite"/>
+            <param name="start" value="-5000"/>
+            <param name="end" value="5000"/>
+            <param name="score" value="5"/>
+            <output name="tab" file="annoTab.tabular"/>
         </test>
     </tests>
     <help><![CDATA[
