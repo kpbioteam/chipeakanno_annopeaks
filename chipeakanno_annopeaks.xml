@@ -1,4 +1,4 @@
-<tool id="chipeakanno_annopeaks" name="chipeakanno_annopeaks" version="0.1.0">
+<tool id="chipeakanno_annopeaks" name="ChIPpeakAnno annoPeaks" version="0.1.0">
     <description>annotate peaks by annoGR object in the given range</description>
     <requirements>
         <requirement type="package" version="3.16.0-0">bioconductor-chippeakanno</requirement>
