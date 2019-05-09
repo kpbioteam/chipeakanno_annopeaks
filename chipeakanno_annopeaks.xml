@@ -35,7 +35,7 @@ write.table(anno, file= '$tab', quote = FALSE, row.names = FALSE, sep = "\t")
         </configfile>
     </configfiles> 
     <inputs>
-        <param type="data" name="dmp" format="interval" label="Differentially Methylated Data"/>
+        <param type="data" name="dmp" format="interval" label="Differentially Methylated Positions"/>
         <param name="type" type="select" label="bindingType" help="Specifying the criteria to associate peaks with annotation e.g. startSite start position of the feature strand">
                         <option value="startSite">startSite</option>
                         <option value="endSite">endSite</option>
