@@ -18,13 +18,13 @@ require("GenomeInfoDbData", quietly = TRUE)
 
 options(warn = -1)
 
-data <-  read.table('$dmp',header = FALSE)
+data <-  read.table('$dmp',header=FALSE)
 
 peaks <- GRanges(seqnames = data[, 1],
                  ranges = IRanges
-                 (start = data[, 2], end = data[, 3]),score=data[, as.numeric('$score')])
+                 (start = as.numeric(data[, 2]), end = as.numeric(data[, 3]), score = data[, as.numeric('$score')]))
 
-db <- toGRanges(EnsDb.Hsapiens.v75)
+db <- toGRanges(EnsDb.Hsapiens.v75, feature="gene")
 seqlevelsStyle(peaks) <- seqlevelsStyle(db)
 
 start <- as.numeric('$start')
