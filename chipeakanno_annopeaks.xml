@@ -1,9 +1,10 @@
 <tool id="chipeakanno_annopeaks" name="ChIPpeakAnno annoPeaks" version="0.1.0">
     <description>annotate peaks by annoGR object in the given range</description>
     <requirements>
-        <requirement type="package" version="3.16.0-0">bioconductor-chippeakanno</requirement>
-        <requirement type="package" version="2.99.0-3">bioconductor-ensdb.hsapiens.v75</requirement>
-        <requirement type="package" version="1.42.1-1">bioconductor-rtracklayer</requirement>
+        <requirement type="package" version="3.20.0">bioconductor-chippeakanno</requirement>
+        <requirement type="package" version="2.99.0">bioconductor-ensdb.hsapiens.v75</requirement>
+        <requirement type="package" version="1.46.0">bioconductor-rtracklayer</requirement>
+        <requirement type="package" version="1.2.2">bioconductor-genomeinfodbdata</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         Rscript '$chipeakanno_annopeaks_script'
@@ -13,10 +14,11 @@
 require("ChIPpeakAnno", quietly = TRUE)
 require("EnsDb.Hsapiens.v75", quietly = TRUE)
 require("rtracklayer", quietly = TRUE)
+require("GenomeInfoDbData", quietly = TRUE) 
 
 options(warn = -1)
 
-data <-  read.table('$dmp')
+data <-  read.table('$dmp',header = FALSE)
 
 peaks <- GRanges(seqnames = data[, 1],
                  ranges = IRanges
@@ -35,7 +37,7 @@ write.table(anno, file= '$tab', quote = FALSE, row.names = FALSE, sep = "\t")
         </configfile>
     </configfiles> 
     <inputs>
-        <param type="data" name="dmp" format="interval" label="Differentially Methylated Positions"/>
+        <param type="data" name="dmp" format="bed" label="Differentially Methylated Positions"/>
         <param name="type" type="select" label="bindingType" help="Specifying the criteria to associate peaks with annotation e.g. startSite start position of the feature strand">
                         <option value="startSite">startSite</option>
                         <option value="endSite">endSite</option>
@@ -52,7 +54,7 @@ write.table(anno, file= '$tab', quote = FALSE, row.names = FALSE, sep = "\t")
     </outputs>
     <tests>
         <test>
-            <param name="dmp" value="Differentially_Methylated_Regions.interval"/>
+            <param name="dmp" value="Differentially_Methylated_Positions.bed"/>
             <param name="type" value="startSite"/>
             <param name="start" value="-5000"/>
             <param name="end" value="5000"/>
